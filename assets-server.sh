@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export PATH=`echo $PATH`
-programname="docker"
 cont_httpd="httpd"
 port_vm_httpd=80
 cont_samba="appcontainers/samba"
@@ -11,7 +10,7 @@ smbpass=""
 path_vm="/var/assets"
 
 # Instalação do assets server
-if which $programname >/dev/null; then
+if which docker >/dev/null; then
 	# Pull dos containers
 	docker pull $cont_httpd
 	docker pull $cont_samba
