@@ -6,8 +6,8 @@ cont_httpd="httpd"
 port_vm_httpd=80
 cont_samba="appcontainers/samba"
 name_cont_samba="samba"
-smbuser="admin"
-smbpass="password"
+smbuser=""
+smbpass=""
 path_vm="/var/assets"
 
 # Instalação do assets server
