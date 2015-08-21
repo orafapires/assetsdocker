@@ -14,6 +14,8 @@ if which docker >/dev/null; then
 	docker pull $cont_samba
 	# Executar o container do Apache montando o diretorio a ser persistido na maquina virtual/fisica
 	docker run -d -it --name $cont_httpd -h $cont_httpd -p $port_vm_httpd:80 -v $path_vm:/usr/local/apache2/htdocs $cont_httpd >/dev/null 2>&1
+	# Concedendo permissão de escrita no diretório do Apache
+	docker exec -i $cont_httpd /bin/bash -c "chmod -R 777 /usr/local/apache2/htdocs"
 	# Checar se o container está rodando
 	cont_httpd_status=$(docker inspect --format="{{ .State.Running }}" $cont_httpd)
 		if $cont_httpd_status == "true"; then
