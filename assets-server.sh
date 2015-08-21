@@ -5,8 +5,6 @@ cont_httpd="httpd"
 port_vm_httpd=80
 cont_samba="appcontainers/samba"
 name_cont_samba="samba"
-smbuser=""
-smbpass=""
 path_vm="/var/assets"
 
 # Instalação do assets server
@@ -26,7 +24,10 @@ if which docker >/dev/null; then
 			echo "Verificar erro:" $cont_httpd_status
 		fi
 	# Executar o container do Samba montando o diretorio do Apache como compartilhamento do serviço
-	docker run -d -it --name $name_cont_samba -h $name_cont_samba -p 138:138/udp -p 139:139 -p 445:445 -p 445:445/udp --volumes-from $cont_httpd -e SMB_USER='$smbuser' -e SMB_PASS='$smbpass' $cont_samba >/dev/null 2>&1
+	docker run -d -it --name $name_cont_samba -h $name_cont_samba -p 138:138/udp -p 139:139 -p 445:445 -p 445:445/udp --volumes-from $cont_httpd -e SMB_USER='admin' -e SMB_PASS='password' $cont_samba >/dev/null 2>&1
+	# Ajustando o diretório de montagem public no samba e reiniciando o serviço
+	docker exec -i $name_cont_samba /bin/bash -c "cat > /etc/samba/smb.conf" < smb.conf
+	docker exec -i $name_cont_samba /bin/bash -c "/etc/init.d/smb restart"
 	# Checar se o container está rodando
 	cont_samba_status=$(docker inspect --format="{{ .State.Running }}" $name_cont_samba)
 		if $cont_samba_status == "true"; then
